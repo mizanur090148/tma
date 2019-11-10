@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Requests;
-use App\Http\Rules\CountSubTasks;
-
 use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Rules\CheckParentUser;
+use App\Http\Rules\CheckNestedTaskDepth;
 
 class TaskRequest extends FormRequest
 {
@@ -40,9 +40,8 @@ class TaskRequest extends FormRequest
         return [
             'title' => 'required|max:100',
             'points' => 'required|integer|between:1,10',
-            //'is_done' => 'required|integer|between:0,1',
-            'user_id' => 'required',
-            'parent_id' => ['nullable', new CountSubTasks]
+            'user_id' => ['required', new CheckParentUser],
+            'parent_id' => ['nullable', new CheckNestedTaskDepth]
         ];
     }
 }

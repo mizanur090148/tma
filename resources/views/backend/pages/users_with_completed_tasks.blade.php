@@ -2,7 +2,7 @@
 @section('content')
   <div class="page-header row no-gutters py-4">
     <div class="col-12 col-sm-4 text-center text-sm-left mb-0">
-      <h3 class="page-title">Users</h3>
+      <h3 class="page-title">Users with tasks details</h3>
     </div>
   </div>
   <div class="row">
@@ -16,8 +16,7 @@
         @include('backend.partials.response_message')
 
         <div class="card-body p-0 pb-3 text-center">
-
-          <ul style="width:300px">
+          {{-- <ul style="width:300px">
             @foreach ($all_parent_tasks as $parent)
                 <li>{{ $parent->title }}
                   <ul>
@@ -27,7 +26,24 @@
                   </ul>
                 </li>
             @endforeach
-          </ul>
+          </ul> --}}
+
+          <table class="table table-bordered" style="width:600px">
+            <thead class="bg-light">
+              @foreach ($users_with_tasks as $user)
+                <tr>
+                  <th width="30%">
+                      {{ $user->first_name. " " . $user->last_name }} 
+                      ({{ $user->completed_task_point . '/'. $user->total_task_point }})
+                  </th>                
+                  <th>
+                      {!! $user->task_details !!}
+                  </th>
+                </tr>
+               @endforeach
+            </thead>
+          </table>
+
 
 
           {{-- <table class="table table-sm">

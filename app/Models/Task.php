@@ -21,18 +21,11 @@ class Task extends Model
 
     public function parent()
     {
-        return $this->belongsTo(self::class)->with('parent')->withDefault();
-        //return $this->hasMany(self::class, 'parent_id');
+        return $this->belongsTo(self::class)->withDefault();
     }
 
     public function sub_tasks()
     {
         return $this->hasMany(self::class, 'parent_id')->with('sub_tasks');
-        //return $this->hasMany(self::class, 'parent_id')->with('parent');
-    }
-
-    public function new_sub_tasks()
-    {
-        return $this->hasMany(self::class, 'master_parent_id', 'id');//->with('sub_tasks');
-    }
+    }    
 }

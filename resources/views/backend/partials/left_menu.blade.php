@@ -36,9 +36,9 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link @if(Request::segment(1) == 'users-with-tasks') active @endif" href="{{ url('/users-with-tasks') }}">
+        <a class="nav-link @if(Request::segment(1) == 'users-with-task-details') active @endif" href="{{ url('/users-with-task-details') }}">
           <i class="material-icons">note_add</i>
-          <span>Users With Tasks</span>
+          <span>Users With Task Details</span>
         </a>
       </li>
     </ul>

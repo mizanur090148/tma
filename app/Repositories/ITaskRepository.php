@@ -11,5 +11,5 @@ interface ITaskRepository
 	public function update(array $where, array $input);
     public function tasksForDropdown();
     public function delete($id);
-    public function usersWithTasks();
+    public function usersWithTaskDetail();
 }

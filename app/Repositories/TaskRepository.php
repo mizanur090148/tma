@@ -9,7 +9,6 @@ class TaskRepository implements ITaskRepository
 	public function all(array $with, $orderByColumn, $orderDirection)
 	{
 		return Task::with($with)
-			//->whereParentId(null)
 			->orderBy($orderByColumn, $orderDirection)
 			->paginate(30);
 	}
@@ -44,32 +43,94 @@ class TaskRepository implements ITaskRepository
 		return Task::destroy($id);
 	}
 
-	public function usersWithTasks()
+	public function usersWithTaskDetail()
 	{
 		$client = new Client();
-		$res = $client->get(USER_LIST_ENDPOINT);		
+		$apiResponse = $client->get(USER_LIST_ENDPOINT);		
 
-		if ($res->getStatusCode() == 200) {
-	        $response_data = $res->getBody()->getContents();
+		if ($apiResponse->getStatusCode() == 200) {
+	        $response_data = $apiResponse->getBody()->getContents();
 	    }
 
 	    $response = json_decode($response_data);	   
-	    $users = collect($response->data);
-	    $data = [];
+	    $users_with_tasks = $response->data ?? [];
 
-	    foreach ($users as $key => $user) {
+	    foreach ($users_with_tasks as $key => $user) {
+
 	    	$all_parent_tasks = Task::with('sub_tasks')
 	    		->where('user_id', $user->id)
-	    		//->where('is_done', 1)
 	    		->whereNull('parent_id')
-	    		->get();
+	    		->get();    	
 
-	    	
+	    	$taskListHtml = '<ul>';
+	    	foreach ($all_parent_tasks as $task) {
+	    		$taskListHtml .= '<li>'.$task->title.' ('.$task->points.')'.$this->buildList($task).'</li>';
+	    	}
+	    	$taskListHtml .= '</ul>';
 
-	    	return $all_parent_tasks;
-	    	
-	    	return $users;
+			$points_datas = $this->pointsData($all_parent_tasks);		
+
+			$users_with_tasks[$key]->completed_task_point = $points_datas['done_point'];
+			$users_with_tasks[$key]->total_task_point = $points_datas['total_point'];
+	    	$users_with_tasks[$key]->task_details = $taskListHtml;
 	    }
+	    
+		return $users_with_tasks;
 	}
 	
+	public function pointsData($tasks)
+	{
+		$points = [];
+		$donePoint = 0;
+		$totalPoint = 0;
+
+		foreach ($tasks as $task) {
+			$this->calDonePoints($task, $donePoint);
+			$this->calTotalPoints($task, $totalPoint);
+		}
+
+		return [
+			'done_point' => $donePoint,
+			'total_point' => $totalPoint
+		];
+	}
+
+	public function calDonePoints($task, &$donePoint)
+	{
+		if ($task->sub_tasks->isEmpty() && $task->is_done) {
+			$donePoint += $task->points;
+		}
+
+		foreach ($task->sub_tasks as $subtask) {
+			$this->calDonePoints($subtask, $donePoint);
+		}
+
+		return $donePoint;
+	}
+
+	public function calTotalPoints($task, &$totalPoint)
+	{
+		if ($task->sub_tasks->isEmpty()) {
+			$totalPoint += $task->points;
+		}
+
+		foreach ($task->sub_tasks as $subtask) {
+			$this->calTotalPoints($subtask, $totalPoint);
+		}
+
+		return $totalPoint;
+	}
+
+	public function buildList($task)
+	{
+		$list = '';
+		if (!$task->sub_tasks->isEmpty()) {
+			$list .= '<ul>';
+			foreach ($task->sub_tasks as $subtask) {
+				$list .= '<li>'.$subtask->title.' ('.$subtask->points.')'.$this->buildList($subtask).'</li>';
+			}
+			$list .= '</ul>';
+		}
+		return $list;
+	}
 }

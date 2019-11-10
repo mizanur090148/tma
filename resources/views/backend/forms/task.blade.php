@@ -1,7 +1,4 @@
 @extends('backend.layout')
-@section('styles')  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.css" />
-@endsection
 @section('content')
 <div class="row">
   <div class="col">
@@ -12,11 +9,12 @@
       <span class="js-response-message text-center"></span>
       <div class="card-body p-0 pb-3">
         <div class="row p-3">
-        <div class="col-sm-4 offset-sm-4"> {{ $task ? 'PUT' : 'POST' }}
+        <div class="col-sm-4 offset-sm-4">
           {!! Form::model($task, ['url' => $task ? 'api/task/'.$task->id : 'api/task', 'method' => $task ? 'PUT' : 'POST','id' => 'taskForm']) !!}
             <div class="form-group">
               <label class="">Parent Task</label>
-              {!! Form::select('parent_id', $tasks ?? [], null, ['class' => 'form-control', 'placeholder' => 'Select a task']) !!}
+              {!! Form::select('parent_id', $tasks ?? [], null, ['class' => 'form-control', 'placeholder' => 'Select a task']) !!} 
+              <span class="parent_id"></span>           
             </div>
             <div class="form-group">
               <label class="">Title</label>
@@ -52,12 +50,10 @@
 </div>
 @endsection
 @section('scripts')
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js"></script>
   <script type="text/javascript">
     $(document).on('click', '.task-save-btn', function() {
       let current = $(this);
-      //current.attr('disabled', true);
-      
+      current.attr('disabled', true);      
       let method = $("#taskForm").attr('method');
       let action = $("#taskForm").attr('action');
       let input = $("#taskForm").serialize();
@@ -68,9 +64,9 @@
         data: input,
         success: function (data, textStatus, xhr) {
           current.removeAttr('disabled');
-          if (xhr.status) {
+          if (xhr.status == 201 || xhr.status == 200) {
             $('.js-response-message').html(getMessage('Successfully created', 'success')).fadeIn().delay(2000).fadeOut(2000);
-            window.location.href = "/tasks";
+            //window.location.href = "/tasks";
           }
         },error: function(response) {
           current.removeAttr('disabled');

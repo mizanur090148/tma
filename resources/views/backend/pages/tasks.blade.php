@@ -14,11 +14,7 @@
             <i class="glyphicon glyphicon-plus"></i> New task
           </a>
         </div>
-        @include('backend.partials.response_message')
-
-        {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#TaskModalLong">
-          Launch demo modal
-        </button> --}}
+        <span class="js-response-message text-center"></span>
 
         <div class="card-body p-0 pb-3 text-center">
           <table class="table table-sm">
@@ -28,80 +24,35 @@
                 <th style="color: green">Parent</th>
                 <th>Title</th>
                 <th>Point</th>
+                <th>User</th>
+                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody id="task-list">
               @forelse($tasks as $task)
                 <tr>
-                  <td>{{ $loop->iteration }}</td>
-                  <td style="color: green">{{-- $task->parent->title ?? '' --}}</td>
-                  <td>{{ $task->title ?? '' }}</td>
+                  <td>{{ $loop->iteration }}</td> 
+                  <td style="color: green">{{ $task->parent->title ?? '' }}</td>
+                  <td>{{ $task->title }}</td>
                   <td>{{ $task->points }}</td>
-                  <td><a href="{{ url('/task/'.$task->id.'/edit') }}">Edit</td>
+                  <td>{{ $users[$task->user_id] }}</td>
+                  <td>
+                    <button type="button" class="btn btn-sm {{ ($task->is_done == 0) ? 'btn-info task-done-btn' : 'btn-success' }}" value="{{ $task->id }}">{{ ($task->is_done == 0) ? 'Click To Done' : 'Done' }} </button>
+                  </td>
+                  <td>
+                    <a class="btn btn-info btn-sm" href="{{ url('/task/'.$task->id.'/edit') }}">Edit</a>
+                  </td>
                 </tr>
               @empty
                 <tr>
-                  <td colspan="5" class="text-danger">Not Found</td>
+                  <td colspan="7" class="text-danger">Not Found</td>
                 </tr>
               @endforelse
             </tbody>            
           </table>
         </div>
       </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="TaskModalLong" tabindex="-1" role="dialog" aria-labelledby="TaskModalLongTitle" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="TaskModalLongTitle">Customer</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form>
-                <div class="modal-body">
-                    <alert-error :form="form" class="text-center"></alert-error>            
-                    <div class="form-group">
-                        <label>Name</label>
-                        <input v-model="form.name" type="text" name="name"
-                        class="form-control">
-                        <has-error :form="form" field="name"></has-error>
-                    </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input v-model="form.email" type="email" name="email"
-                        class="form-control">
-                        <has-error :form="form" field="email"></has-error>
-                    </div>
-                    <div class="form-group">
-                        <label>Phone</label>
-                        <input v-model="form.phone" type="tel" name="phone"
-                        class="form-control">
-                        <has-error :form="form" field="phone"></has-error>
-                    </div>
-                    <div class="form-group">
-                        <label>Address</label>
-                        <textarea v-model="form.address" name="address"
-                        class="form-control"></textarea>
-                        <has-error :form="form" field="address"></has-error>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Total</label>
-                        <input v-model="form.total" type="text" name="total"
-                            class="form-control">
-                            <has-error :form="form" field="total"></has-error>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button :disabled="form.busy" type="submit" class="btn btn-primary">Save</button>
-                </div>
-            </form>
-        </div>                
     </div>
   </div>
 @endsection
@@ -128,5 +79,28 @@
           console.log( "Request failed: " + textStatus );
       });
     });*/
+    $(document).on('click', '.task-done-btn', function() {
+      let current = $(this);      
+      let id = current.val();
+      var token = $('meta[name="csrf-token"]').attr('content');
+
+      $.ajax({
+        method: 'PUT',
+        url: '/api/task-status-update/' + id,
+        data: { status: 1, _token: token },
+        success: function (response, textStatus, xhr) {
+          if (xhr.status == 200) {
+            current.removeClass('btn-info task-done-btn').addClass('btn-success').html('Done');
+            $('.js-response-message')
+              .html(getMessage('Successfully updated', 'success'))
+              .fadeIn()
+              .delay(2000)
+              .fadeOut(2000);
+          }
+        },error: function(response) {
+          $('.js-response-message').html(getMessage('Not successfully updated', 'error')).fadeIn().delay(2000).fadeOut(2000);
+        }
+      });
+    });  
   </script>
 @endsection

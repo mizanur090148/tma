@@ -9,21 +9,28 @@ use App\Repositories\ITaskRepository;
 class TasksController extends Controller
 {
     protected $task;
+
     public function __construct(ITaskRepository $task)
     {
     	$this->task = $task;
+
     }
 
     public function index()
     {
-    	$with = ['sub_tasks', 'parent'];
+    	$with = [
+            'sub_tasks:id,title,parent_id', 
+            'parent:id,title'
+        ];
     	$orderByColumn = 'id';
     	$orderDirection = 'asc';
 
     	$tasks = $this->task->all($with, $orderByColumn, $orderDirection);
-//dd($tasks);
+        $users = $this->userList();
+
     	return view('backend.pages.tasks', [
-    		'tasks' => $tasks
+    		'tasks' => $tasks,
+            'users' => $users
     	]);
     }
 
@@ -56,9 +63,8 @@ class TasksController extends Controller
     {
     	$client = new Client();
 		$res = $client->get(USER_LIST_ENDPOINT);
-		//echo $res->getStatusCode(); // 200
 
-		if ($res->getStatusCode() == 200) { // 200 OK
+		if ($res->getStatusCode() == 200) {
 	        $response_data = $res->getBody()->getContents();
 	    }
 
@@ -68,5 +74,14 @@ class TasksController extends Controller
 
 	    return $users;
     }
-    
+
+    public function usersWithTaskDetail()
+    {        
+        $users_with_tasks = $this->task->usersWithTaskDetail();
+        
+        return view('backend.pages.users_with_completed_tasks', [
+            'users_with_tasks' => $users_with_tasks
+        ]);
+    }
+
 }

@@ -17,46 +17,51 @@ class TaskController extends Controller
 
     public function all()
     {   		
-   		$orderByColumn = 'id';
-   		$orderDirection = 'desc';
+   		  $with = [
+            'sub_tasks:id,title,parent_id', 
+            'parent:id,title'
+        ];
+        $orderByColumn = 'id';
+        $orderDirection = 'asc';
 	     
-   		$tasks = $this->task->all($with = [], $orderByColumn, $orderDirection);
-   		return $tasks;
-   		/*return view('backend.pages.deposites', [
-   			'deposites' => $deposites
-   		]);*/
+   		 return $this->task->all($with, $orderByColumn, $orderDirection);
     }    
 
     public function store(TaskRequest $request)
     {
-    	try {
     		$input = [
     			'parent_id' => $request->parent_id,
     			'user_id' => $request->user_id,
     			'title' => $request->title,
-    			'points' => $request->points    			
+    			'points' => $request->points
     		];
-   			return $this->task->store($input);
-   			
-   		} catch (Exception $e) {
-   			
-   		}
-   		return true;
+       	return $this->task->store($input);     		
     }
 
     public function update(TaskRequest $request, $id)
-    {    	
+    {       	
         $input = [
-			'parent_id' => $request->parent_id,
-			'user_id' => $request->user_id,
-			'title' => $request->title,
-			'points' => $request->points,
-			'is_done' => $request->is_done
-		];
-		$where = [
-			'id' => $id
-		];
-    	return $this->task->update($where, $input);
+      			'parent_id' => $request->parent_id,
+      			'user_id' => $request->user_id,
+      			'title' => $request->title,
+      			'points' => $request->points,
+      			'is_done' => $request->is_done
+    		];
+    		$where = [
+    			'id' => $id
+    		];
+        return $this->task->update($where, $input);
+    }
+
+    public function taskStatusUpdate(Request $request, $id)
+    {
+        $input = [
+            'is_done' => $request->status           
+        ];
+        $where = [
+            'id' => $id
+        ];
+        return $this->task->update($where, $input);
     }
 
     public function destroy($id)

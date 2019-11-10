@@ -2,15 +2,15 @@
 @section('content')
   <div class="page-header row no-gutters py-4">
     <div class="col-12 col-sm-4 text-center text-sm-left mb-0">
-      <h3 class="page-title">Users</h3>
+      <h3 class="page-title">User List</h3>
     </div>
   </div>
   <div class="row">
     <div class="col">
       <div class="card card-small mb-4">
         {{-- <div class="card-header border-bottom">   
-          <a class="btn btn-sm btn-info" href="{{ url('deposit/create') }}">
-            <i class="glyphicon glyphicon-plus"></i> New Task
+          <a class="btn btn-sm btn-info" href="{{ url('user/create') }}">
+            <i class="glyphicon glyphicon-plus"></i> New User
           </a>
         </div> --}}
         @include('backend.partials.response_message')
@@ -25,46 +25,23 @@
                 <th scope="col" class="border-0">E-mail</th>
               </tr>
             </thead>
-            <tbody id="user-list">
-              @foreach ($response_data as $key => $users)
-                @foreach ($users as $user)
-                  <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $user->first_name }}</td>
-                    <td>{{ $user->last_name }}</td>
-                    <td>{{ $user->email }}</td>
-                  </tr>
-                @endforeach
-              @endforeach
+            <tbody id="user-list">             
+              @forelse ($users as $user)
+                <tr>
+                  <td>{{ $loop->iteration }}</td>
+                  <td>{{ $user->first_name }}</td>
+                  <td>{{ $user->last_name }}</td>
+                  <td>{{ $user->email }}</td>
+                </tr>
+              @empty
+                <tr>
+                  <td colspan="4" class="text-danger">Not found</td>
+                </tr>
+              @endforelse
             </tfoot>
           </table>
         </div>
       </div>
     </div>
   </div>
-@endsection
-@section('scripts')
-  <script type="text/javascript">
-    $(document).ready(function() {
-      /*$.ajax({
-        method: "GET",
-        url: '/user-list',
-      }).done(function( response ) { console.log(response);
-          let tr;
-          $.each(response, function(index, user) {console.log(user);
-          tr  += [
-            '<tr>',
-              '<td>' + user.first_name + '</td>',
-              '<td>' + user.first_name + '</td>',
-              '<td>' + user.first_name + '</td>',
-              '<td>' + user.first_name + '</td>',
-            '</tr>'
-            ].join('');               
-          });
-          $('#user-list').html(tr);
-      }).fail(function( jqXHR, textStatus ) {
-          console.log( "Request failed: " + textStatus );
-      });*/
-    });
-  </script>
 @endsection

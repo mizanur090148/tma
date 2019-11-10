@@ -11,16 +11,14 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['middleware' => 'web'], function () {
+	Route::get('/', 'UsersController@index');
+	Route::get('/users', 'UsersController@index');
+	Route::get('/user-list', 'UsersController@userList');
+	Route::get('/tasks', 'TasksController@index');
+	Route::get('/task/create', 'TasksController@create');
+	Route::get('/task/{id}/edit', 'TasksController@edit');
+	Route::put('/task/{id}', 'TasksController@update');
+	Route::get('/users-with-task-details', 'TasksController@usersWithTaskDetail');
 });
-
-Route::get('/users', 'UsersController@index');
-Route::get('/user-list', 'UsersController@userList');
-Route::get('/users-with-tasks', 'UsersController@usersWithTaskDetail');
-
-Route::get('/tasks', 'TasksController@index');
-Route::get('/task/create', 'TasksController@create');
-Route::get('/task/{id}/edit', 'TasksController@edit');
-Route::put('/task/{id}', 'TasksController@update');
 

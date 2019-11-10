@@ -16,10 +16,10 @@ class CreateTasksTable extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('parent_id')->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('user_id');
             $table->string('title', 100);
-            $table->smallInteger('point');
-            $table->tinyInteger('is_done')->default(0)->comment('1=true, 0=false');
+            $table->smallInteger('points');
+            $table->tinyInteger('is_done')->default(0)->comment('0=not done, 1=done');
             $table->softDeletes();
             $table->timestamps();
         });
