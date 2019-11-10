@@ -55,7 +55,7 @@ class TasksController extends Controller
     public function userList()
     {
     	$client = new Client();
-		$res = $client->get('https://gitlab.iterato.lt/snippets/3/raw');
+		$res = $client->get(USER_LIST_ENDPOINT);
 		//echo $res->getStatusCode(); // 200
 
 		if ($res->getStatusCode() == 200) { // 200 OK
@@ -68,4 +68,5 @@ class TasksController extends Controller
 
 	    return $users;
     }
+    
 }

@@ -46,26 +46,7 @@
             </a>
             <a class="dropdown-item notification__all text-center" href="#"> View all Notifications </a>
           </div>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle text-nowrap px-3" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-            <img class="user-avatar rounded-circle mr-2" src="{{ asset('/backend/images/avatars/4.jpg') }}" alt="User Avatar">
-            <span class="d-none d-md-inline-block"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>
-          </a>
-          <div class="dropdown-menu dropdown-menu-small">
-            <a class="dropdown-item" href="{{ url('/account-info') }}">
-              <i class="material-icons">&#xE7FD;</i> Profile
-            </a>           
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="{{ url('/change-account-info') }}">
-              <i class="material-icons">&#xE7FD;</i> Change account Info
-            </a>           
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item text-danger" href="{{ url('/logout') }}">
-              <i class="material-icons text-danger">&#xE879;</i> Logout
-            </a>
-          </div>
-        </li>
+        </li>       
       </ul>
       <nav class="nav">
         <a href="#" class="nav-link nav-link-icon toggle-sidebar d-md-inline d-lg-none text-center border-left" data-toggle="collapse" data-target=".header-navbar" aria-expanded="false" aria-controls="header-navbar">

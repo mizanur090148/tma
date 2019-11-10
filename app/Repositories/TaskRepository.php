@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 use App\Models\Task;
+use GuzzleHttp\Client;
 
 class TaskRepository implements ITaskRepository
 {
@@ -43,9 +44,32 @@ class TaskRepository implements ITaskRepository
 		return Task::destroy($id);
 	}
 
-	public function userListWithRessult()
+	public function usersWithTasks()
 	{
-		dd(99);
+		$client = new Client();
+		$res = $client->get(USER_LIST_ENDPOINT);		
+
+		if ($res->getStatusCode() == 200) {
+	        $response_data = $res->getBody()->getContents();
+	    }
+
+	    $response = json_decode($response_data);	   
+	    $users = collect($response->data);
+	    $data = [];
+
+	    foreach ($users as $key => $user) {
+	    	$all_parent_tasks = Task::with('sub_tasks')
+	    		->where('user_id', $user->id)
+	    		//->where('is_done', 1)
+	    		->whereNull('parent_id')
+	    		->get();
+
+	    	
+
+	    	return $all_parent_tasks;
+	    	
+	    	return $users;
+	    }
 	}
 	
 }

@@ -34,23 +34,11 @@
           <i class="material-icons">note_add</i>
           <span>Users</span>
         </a>
-      </li>      
-      <li class="nav-item">
-        <a class="nav-link @if(Request::segment(1) == 'account-info') active @endif" href="{{ url('/account-info') }}">
-          <i class="material-icons @if(Request::segment(1) == 'account-info') active @endif">person</i>
-          <span>Account Info</span>
-        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link @if(Request::segment(1) == 'change-account-info') active @endif" href="{{ url('/change-account-info') }}">
+        <a class="nav-link @if(Request::segment(1) == 'users-with-tasks') active @endif" href="{{ url('/users-with-tasks') }}">
           <i class="material-icons">note_add</i>
-          <span>Change account Info</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link " href="{{ url('/logout') }}">
-          <i class="material-icons">logout</i>
-          <span>Logout</span>
+          <span>Users With Tasks</span>
         </a>
       </li>
     </ul>

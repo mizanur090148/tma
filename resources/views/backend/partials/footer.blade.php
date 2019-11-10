@@ -17,6 +17,6 @@
     </li>
   </ul> --}}
   <span class="copyright ml-auto my-auto mr-2">Copyright © 2018
-    <a href="https://designrevision.com" rel="nofollow">Minibank</a>
+    <a href="https://designrevision.com" rel="nofollow">tma</a>
   </span>
 </footer>

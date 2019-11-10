@@ -22,7 +22,7 @@ Route::get('/task', 'v1\TaskController@all');
 Route::post('/task', 'v1\TaskController@store');
 Route::post('/task', 'v1\TaskController@store');
 Route::put('/task/{id}', 'v1\TaskController@update');
-Route::get('/task/user-list-with-result', 'v1\TaskController@userListWithRessult');
+Route::get('/task/users-with-tasks', 'v1\TaskController@usersWithTasks');
 
 Route::get('/task/{id}', 'v1\TaskController@destroy');
 

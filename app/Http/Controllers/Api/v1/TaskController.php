@@ -64,8 +64,8 @@ class TaskController extends Controller
     	return $this->task->delete($id);
     }
 
-    public function userListWithRessult()
+    public function usersWithTasks()
     {
-    	return $this->task->userListWithRessult();
+    	return $this->task->usersWithTasks();
     }
 }

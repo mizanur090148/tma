@@ -17,15 +17,22 @@ class Task extends Model
 
     protected $dates = [
     	'deleted_at'
-    ];
-
-    public function sub_tasks()
-    {
-        return $this->hasMany(self::class, 'parent_id')->with('sub_tasks');
-    }
+    ];   
 
     public function parent()
     {
         return $this->belongsTo(self::class)->with('parent')->withDefault();
+        //return $this->hasMany(self::class, 'parent_id');
+    }
+
+    public function sub_tasks()
+    {
+        return $this->hasMany(self::class, 'parent_id')->with('sub_tasks');
+        //return $this->hasMany(self::class, 'parent_id')->with('parent');
+    }
+
+    public function new_sub_tasks()
+    {
+        return $this->hasMany(self::class, 'master_parent_id', 'id');//->with('sub_tasks');
     }
 }

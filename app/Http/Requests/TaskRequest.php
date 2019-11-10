@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Requests;
+use App\Http\Rules\CountSubTasks;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,7 +26,7 @@ class TaskRequest extends FormRequest
     {
         return [           
             'points.digits_between' => 'Enter 1 to 10 digits',
-            'user_id.required' => 'The user select is required'           
+            'user_id.required' => 'The user select is required'
         ];
     }
 
@@ -40,7 +41,8 @@ class TaskRequest extends FormRequest
             'title' => 'required|max:100',
             'points' => 'required|integer|between:1,10',
             //'is_done' => 'required|integer|between:0,1',
-            'user_id' => 'required'
+            'user_id' => 'required',
+            'parent_id' => ['nullable', new CountSubTasks]
         ];
     }
 }

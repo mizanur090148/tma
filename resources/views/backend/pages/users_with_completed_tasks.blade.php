@@ -16,7 +16,21 @@
         @include('backend.partials.response_message')
 
         <div class="card-body p-0 pb-3 text-center">
-          <table class="table table-sm">
+
+          <ul style="width:300px">
+            @foreach ($all_parent_tasks as $parent)
+                <li>{{ $parent->title }}
+                  <ul>
+                  @foreach ($parent->sub_tasks as $sub_tasks)
+                      @include('backend.pages.sub_tasks', ['sub_tasks' => $sub_tasks])
+                  @endforeach
+                  </ul>
+                </li>
+            @endforeach
+          </ul>
+
+
+          {{-- <table class="table table-sm">
             <thead class="bg-light">
               <tr>
                 <th scope="col" class="border-0">#</th>
@@ -26,18 +40,8 @@
               </tr>
             </thead>
             <tbody id="user-list">
-              @foreach ($response_data as $key => $users)
-                @foreach ($users as $user)
-                  <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $user->first_name }}</td>
-                    <td>{{ $user->last_name }}</td>
-                    <td>{{ $user->email }}</td>
-                  </tr>
-                @endforeach
-              @endforeach
-            </tfoot>
-          </table>
+              
+          </table> --}}
         </div>
       </div>
     </div>

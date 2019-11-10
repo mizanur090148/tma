@@ -25,7 +25,7 @@
             <thead class="bg-light">
               <tr>
                 <th>#</th>
-                <th>Parent</th>
+                <th style="color: green">Parent</th>
                 <th>Title</th>
                 <th>Point</th>
                 <th>Actions</th>
@@ -35,8 +35,8 @@
               @forelse($tasks as $task)
                 <tr>
                   <td>{{ $loop->iteration }}</td>
-                  <td>{{ $task->parent->title }}</td>
-                  <td>{{ $task->title }}</td>
+                  <td style="color: green">{{-- $task->parent->title ?? '' --}}</td>
+                  <td>{{ $task->title ?? '' }}</td>
                   <td>{{ $task->points }}</td>
                   <td><a href="{{ url('/task/'.$task->id.'/edit') }}">Edit</td>
                 </tr>

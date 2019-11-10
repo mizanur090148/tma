@@ -17,8 +17,10 @@ Route::get('/', function () {
 
 Route::get('/users', 'UsersController@index');
 Route::get('/user-list', 'UsersController@userList');
+Route::get('/users-with-tasks', 'UsersController@usersWithTaskDetail');
 
 Route::get('/tasks', 'TasksController@index');
 Route::get('/task/create', 'TasksController@create');
 Route::get('/task/{id}/edit', 'TasksController@edit');
 Route::put('/task/{id}', 'TasksController@update');
+
