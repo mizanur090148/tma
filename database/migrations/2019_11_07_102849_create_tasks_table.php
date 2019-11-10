@@ -20,6 +20,7 @@ class CreateTasksTable extends Migration
             $table->string('title', 100);
             $table->smallInteger('points');
             $table->tinyInteger('is_done')->default(0)->comment('0=not done, 1=done');
+            $table->unsignedBigInteger('master_parent_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

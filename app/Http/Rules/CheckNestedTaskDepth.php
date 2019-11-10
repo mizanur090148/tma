@@ -26,54 +26,23 @@ class CheckNestedTaskDepth implements Rule
      */
     public function passes($attribute, $user_id)
     {
-       // code does not work for a condtion
-        /*if (request('parent_id')) {
-            $task = Task::with('sub_tasks')->where('id', request('parent_id'))->first();         
+       if (request('parent_id')) {
+            $task = Task::where('id', request('parent_id'))->first(); 
+            $taskNew = Task::where('parent_id', request('parent_id'))->count(); 
+            if ($taskNew > 0) {
+                return true;
+            }
+            $all_parents = Task::where('master_parent_id', $task->master_parent_id)
+                ->pluck('parent_id')
+                ->all();
 
-            // count current parent id to down nested depth
-            $downCount = 1;
-            $depthDownCount = $this->countNestedDownDepth($task, $downCount);
-
-            // count current parent id to up nested depth
-            $upCount = 0;
-            $depthUpCount = $this->countNestedUpDepth($task, $upCount);
-
-            $totalDepth = $depthDownCount + $depthUpCount;
-    
-            if ($totalDepth > 2) {//dd($totalDepth);
+            if (count(array_unique($all_parents)) >= 5) {
                 return false;
             }
-        }*/
-
+        }
+       
         return true;
-    }
-
-    public function countNestedDownDepth($task, &$downCount)
-    {     
-        if(!$task->sub_tasks->isEmpty()) {
-            $downCount++;
-        }
-
-        foreach ($task->sub_tasks as $subtask) {
-            $this->countNestedDownDepth($subtask, $downCount);
-        }
-
-        return $downCount;
-    }
-
-    public function countNestedUpDepth($task, &$upCount)
-    {
-      if (!$task->parent_id) {
-        return $upCount;
-      }
-      if($task->parent) {
-        $upCount++;
-      }
-
-      $this->countNestedUpDepth($task->parent, $upCount);
-
-      return $upCount;
-    }
+    }   
 
     /**
      * Get the validation error message.

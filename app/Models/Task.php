@@ -12,7 +12,8 @@ class Task extends Model
     	'user_id',
     	'title',
     	'points',
-    	'is_done'
+    	'is_done',
+        'master_parent_id'
     ];
 
     protected $dates = [

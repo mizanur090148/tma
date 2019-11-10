@@ -10,6 +10,7 @@ use App\Http\Requests\TaskRequest;
 class TaskController extends Controller
 {
     private $task;
+    
     public function __construct(ITaskRepository $task)
     {
     	$this->task = $task;    	

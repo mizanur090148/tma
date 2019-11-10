@@ -65,8 +65,8 @@
         success: function (data, textStatus, xhr) {
           current.removeAttr('disabled');
           if (xhr.status == 201 || xhr.status == 200) {
-            $('.js-response-message').html(getMessage('Successfully created', 'success')).fadeIn().delay(2000).fadeOut(2000);
-            //window.location.href = "/tasks";
+            $('.js-response-message').html(getMessage('Operation successfully done', 'success')).fadeIn().delay(2000).fadeOut(2000);
+            window.location.href = "/tasks";
           }
         },error: function(response) {
           current.removeAttr('disabled');
