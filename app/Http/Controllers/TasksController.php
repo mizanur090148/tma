@@ -67,7 +67,6 @@ class TasksController extends Controller
 		if ($res->getStatusCode() == 200) {
 	        $response_data = $res->getBody()->getContents();
 	    }
-
 	    $response = json_decode($response_data);	   
 	    $users = collect($response->data);
 	    $users = $users->pluck('email', 'id');
