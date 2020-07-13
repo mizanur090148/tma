@@ -1,4 +1,7 @@
 ---------------------Project Configuration------------------------
+Using Language: Php
+Framework: Laravel
+
 01. Clone from github
 02. Composer install
 03. Create database and configure .env file
